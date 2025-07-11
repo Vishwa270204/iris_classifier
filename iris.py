@@ -53,28 +53,28 @@ st.text("Confusion Matrix:")
 st.write(confusion_matrix(y_test, y_pred))
 
 
-# Step 9: User Input for Prediction
+# Step 9: User Input for Prediction with number_input instead of sliders
 st.subheader("🔮 Predict the Iris Flower Type")
 
-sepal_length = st.slider('Sepal length (cm)',
-                         float(df['sepal length (cm)'].min()),
-                         float(df['sepal length (cm)'].max()),
-                         float(df['sepal length (cm)'].mean()))
+sepal_length = st.number_input('Sepal length (cm)', 
+                               min_value=float(df['sepal length (cm)'].min()),
+                               max_value=float(df['sepal length (cm)'].max()),
+                               value=float(df['sepal length (cm)'].mean()))
 
-sepal_width = st.slider('Sepal width (cm)',
-                        float(df['sepal width (cm)'].min()),
-                        float(df['sepal width (cm)'].max()),
-                        float(df['sepal width (cm)'].mean()))
+sepal_width = st.number_input('Sepal width (cm)', 
+                              min_value=float(df['sepal width (cm)'].min()),
+                              max_value=float(df['sepal width (cm)'].max()),
+                              value=float(df['sepal width (cm)'].mean()))
 
-petal_length = st.slider('Petal length (cm)',
-                         float(df['petal length (cm)'].min()),
-                         float(df['petal length (cm)'].max()),
-                         float(df['petal length (cm)'].mean()))
+petal_length = st.number_input('Petal length (cm)', 
+                               min_value=float(df['petal length (cm)'].min()),
+                               max_value=float(df['petal length (cm)'].max()),
+                               value=float(df['petal length (cm)'].mean()))
 
-petal_width = st.slider('Petal width (cm)',
-                        float(df['petal width (cm)'].min()),
-                        float(df['petal width (cm)'].max()),
-                        float(df['petal width (cm)'].mean()))
+petal_width = st.number_input('Petal width (cm)', 
+                              min_value=float(df['petal width (cm)'].min()),
+                              max_value=float(df['petal width (cm)'].max()),
+                              value=float(df['petal width (cm)'].mean()))
 
 # Prepare the feature array for prediction
 user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
