@@ -25,7 +25,7 @@ df['species'] = df['target'].apply(lambda x: iris.target_names[x])
 
 # Step 3: Display Dataset
 print("First 5 rows of dataset:")
-display(df.head())
+st.write(df.head())
 
 # Step 4: Visualize the Data
 sns.pairplot(df, hue="species")
