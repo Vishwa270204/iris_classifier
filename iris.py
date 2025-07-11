@@ -74,10 +74,11 @@ sepal_width = get_valid_input('Sepal width', float(df['sepal width (cm)'].min())
 petal_length = get_valid_input('Petal length', float(df['petal length (cm)'].min()), float(df['petal length (cm)'].max()))
 petal_width = get_valid_input('Petal width', float(df['petal width (cm)'].min()), float(df['petal width (cm)'].max()))
 
-if None not in (sepal_length, sepal_width, petal_length, petal_width):
-    user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
-    user_prediction = model.predict(user_features)
-    predicted_species = iris.target_names[user_prediction][0]
-    st.write(f"### The predicted Iris flower species is: **{predicted_species.capitalize()}**")
-else:
-    st.write("Please enter valid values in all fields.")
+if st.button("Predict"):
+    if None not in (sepal_length, sepal_width, petal_length, petal_width):
+        user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
+        user_prediction = model.predict(user_features)
+        predicted_species = iris.target_names[user_prediction][0]
+        st.write(f"### The predicted Iris flower species is: **{predicted_species.capitalize()}**")
+    else:
+        st.write("Please enter valid values in all fields.")
