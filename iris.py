@@ -53,35 +53,30 @@ st.text("Confusion Matrix:")
 st.write(confusion_matrix(y_test, y_pred))
 
 
-# Step 9: User Input for Prediction with number_input instead of sliders
+# Step 9: User Input for Prediction using validated text input boxes
 st.subheader("🔮 Predict the Iris Flower Type")
 
-sepal_length = st.number_input('Sepal length (cm)', 
-                               min_value=float(df['sepal length (cm)'].min()),
-                               max_value=float(df['sepal length (cm)'].max()),
-                               value=float(df['sepal length (cm)'].mean()))
+def get_valid_input(feature_name, min_val, max_val, default):
+    user_input = st.text_input(f"Enter {feature_name} (cm) [{min_val} - {max_val}]:", value=str(default))
+    try:
+        val = float(user_input)
+        if val < min_val or val > max_val:
+            st.error(f"⚠️ Value must be between {min_val} and {max_val}")
+            return None
+        return val
+    except ValueError:
+        st.error("⚠️ Please enter a valid number")
+        return None
 
-sepal_width = st.number_input('Sepal width (cm)', 
-                              min_value=float(df['sepal width (cm)'].min()),
-                              max_value=float(df['sepal width (cm)'].max()),
-                              value=float(df['sepal width (cm)'].mean()))
+sepal_length = get_valid_input('Sepal length', float(df['sepal length (cm)'].min()), float(df['sepal length (cm)'].max()), float(df['sepal length (cm)'].mean()))
+sepal_width = get_valid_input('Sepal width', float(df['sepal width (cm)'].min()), float(df['sepal width (cm)'].max()), float(df['sepal width (cm)'].mean()))
+petal_length = get_valid_input('Petal length', float(df['petal length (cm)'].min()), float(df['petal length (cm)'].max()), float(df['petal length (cm)'].mean()))
+petal_width = get_valid_input('Petal width', float(df['petal width (cm)'].min()), float(df['petal width (cm)'].max()), float(df['petal width (cm)'].mean()))
 
-petal_length = st.number_input('Petal length (cm)', 
-                               min_value=float(df['petal length (cm)'].min()),
-                               max_value=float(df['petal length (cm)'].max()),
-                               value=float(df['petal length (cm)'].mean()))
-
-petal_width = st.number_input('Petal width (cm)', 
-                              min_value=float(df['petal width (cm)'].min()),
-                              max_value=float(df['petal width (cm)'].max()),
-                              value=float(df['petal width (cm)'].mean()))
-
-# Prepare the feature array for prediction
-user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
-
-# Predict the class using the trained model
-user_prediction = model.predict(user_features)
-predicted_species = iris.target_names[user_prediction][0]
-
-# Display the prediction
-st.write(f"### The predicted Iris flower species is: **{predicted_species.capitalize()}**")
+if None not in (sepal_length, sepal_width, petal_length, petal_width):
+    user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
+    user_prediction = model.predict(user_features)
+    predicted_species = iris.target_names[user_prediction][0]
+    st.write(f"### The predicted Iris flower species is: **{predicted_species.capitalize()}**")
+else:
+    st.write("Please enter valid values in all fields.")
