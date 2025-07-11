@@ -53,3 +53,35 @@ st.text("Confusion Matrix:")
 st.write(confusion_matrix(y_test, y_pred))
 
 
+# Step 9: User Input for Prediction
+st.subheader("🔮 Predict the Iris Flower Type")
+
+sepal_length = st.slider('Sepal length (cm)',
+                         float(df['sepal length (cm)'].min()),
+                         float(df['sepal length (cm)'].max()),
+                         float(df['sepal length (cm)'].mean()))
+
+sepal_width = st.slider('Sepal width (cm)',
+                        float(df['sepal width (cm)'].min()),
+                        float(df['sepal width (cm)'].max()),
+                        float(df['sepal width (cm)'].mean()))
+
+petal_length = st.slider('Petal length (cm)',
+                         float(df['petal length (cm)'].min()),
+                         float(df['petal length (cm)'].max()),
+                         float(df['petal length (cm)'].mean()))
+
+petal_width = st.slider('Petal width (cm)',
+                        float(df['petal width (cm)'].min()),
+                        float(df['petal width (cm)'].max()),
+                        float(df['petal width (cm)'].mean()))
+
+# Prepare the feature array for prediction
+user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
+
+# Predict the class using the trained model
+user_prediction = model.predict(user_features)
+predicted_species = iris.target_names[user_prediction][0]
+
+# Display the prediction
+st.write(f"### The predicted Iris flower species is: **{predicted_species.capitalize()}**")
