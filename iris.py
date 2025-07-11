@@ -53,11 +53,13 @@ st.text("Confusion Matrix:")
 st.write(confusion_matrix(y_test, y_pred))
 
 
-# Step 9: User Input for Prediction using validated text input boxes
+# Step 9: User Input for Prediction with blank text inputs and validation
 st.subheader("🔮 Predict the Iris Flower Type")
 
-def get_valid_input(feature_name, min_val, max_val, default):
-    user_input = st.text_input(f"Enter {feature_name} (cm) [{min_val} - {max_val}]:", value=str(default))
+def get_valid_input(feature_name, min_val, max_val):
+    user_input = st.text_input(f"Enter {feature_name} (cm) [{min_val} - {max_val}]:", value="")
+    if user_input == "":
+        return None
     try:
         val = float(user_input)
         if val < min_val or val > max_val:
@@ -68,10 +70,10 @@ def get_valid_input(feature_name, min_val, max_val, default):
         st.error("⚠️ Please enter a valid number")
         return None
 
-sepal_length = get_valid_input('Sepal length', float(df['sepal length (cm)'].min()), float(df['sepal length (cm)'].max()), float(df['sepal length (cm)'].mean()))
-sepal_width = get_valid_input('Sepal width', float(df['sepal width (cm)'].min()), float(df['sepal width (cm)'].max()), float(df['sepal width (cm)'].mean()))
-petal_length = get_valid_input('Petal length', float(df['petal length (cm)'].min()), float(df['petal length (cm)'].max()), float(df['petal length (cm)'].mean()))
-petal_width = get_valid_input('Petal width', float(df['petal width (cm)'].min()), float(df['petal width (cm)'].max()), float(df['petal width (cm)'].mean()))
+sepal_length = get_valid_input('Sepal length', float(df['sepal length (cm)'].min()), float(df['sepal length (cm)'].max()))
+sepal_width = get_valid_input('Sepal width', float(df['sepal width (cm)'].min()), float(df['sepal width (cm)'].max()))
+petal_length = get_valid_input('Petal length', float(df['petal length (cm)'].min()), float(df['petal length (cm)'].max()))
+petal_width = get_valid_input('Petal width', float(df['petal width (cm)'].min()), float(df['petal width (cm)'].max()))
 
 if None not in (sepal_length, sepal_width, petal_length, petal_width):
     user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
