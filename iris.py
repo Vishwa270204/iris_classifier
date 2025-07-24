@@ -1,9 +1,9 @@
-# iris.py
+# iris_normal.py
+
 # Step 1: Import Libraries
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import streamlit as st
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
@@ -15,15 +15,10 @@ df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
 df['target'] = iris.target
 df['species'] = df['target'].apply(lambda x: iris.target_names[x])
 
-# Streamlit Title
-st.title("🌸 Iris Flower Classifier")
-st.subheader("Dataset Preview")
-st.write(df.head())
-
 # Step 3: Visualize the Data
-st.subheader("📊 Pairplot Visualization")
-fig = sns.pairplot(df, hue="species")
-st.pyplot(fig)
+print("\n📊 Generating Pairplot (will open in a separate window)...")
+sns.pairplot(df, hue="species")
+plt.show()
 
 # Step 4: Prepare Data
 X = df[iris.feature_names]
@@ -40,45 +35,34 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
 # Step 8: Evaluation Results
-st.subheader("✅ Model Evaluation")
-
+print("\n✅ Model Evaluation")
 accuracy = accuracy_score(y_test, y_pred)
-st.write(f"**Accuracy:** {accuracy:.2f}")
+print(f"Accuracy: {accuracy:.2f}\n")
+print("Classification Report:\n", classification_report(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 
-st.text("Classification Report:")
-st.text(classification_report(y_test, y_pred))
-
-st.text("Confusion Matrix:")
-st.write(confusion_matrix(y_test, y_pred))
-
-
-# Step 9: User Input for Prediction with blank text inputs and validation
-st.subheader("🔮 Predict the Iris Flower Type")
-
+# Step 9: User Input for Prediction
 def get_valid_input(feature_name, min_val, max_val):
-    user_input = st.text_input(f"Enter {feature_name} (cm) [{min_val} - {max_val}]:", value="")
-    if user_input == "":
-        return None
-    try:
-        val = float(user_input)
-        if val < min_val or val > max_val:
-            st.error(f"⚠️ Value must be between {min_val} and {max_val}")
-            return None
-        return val
-    except ValueError:
-        st.error("⚠️ Please enter a valid number")
-        return None
+    while True:
+        try:
+            user_input = input(f"Enter {feature_name} in cm [{min_val:.1f} - {max_val:.1f}]: ")
+            val = float(user_input)
+            if val < min_val or val > max_val:
+                print(f"⚠️ Value must be between {min_val:.1f} and {max_val:.1f}")
+            else:
+                return val
+        except ValueError:
+            print("⚠️ Please enter a valid number.")
 
-sepal_length = get_valid_input('Sepal length', float(df['sepal length (cm)'].min()), float(df['sepal length (cm)'].max()))
-sepal_width = get_valid_input('Sepal width', float(df['sepal width (cm)'].min()), float(df['sepal width (cm)'].max()))
-petal_length = get_valid_input('Petal length', float(df['petal length (cm)'].min()), float(df['petal length (cm)'].max()))
-petal_width = get_valid_input('Petal width', float(df['petal width (cm)'].min()), float(df['petal width (cm)'].max()))
+print("\n🔮 Predict the Iris Flower Type")
 
-if st.button("Predict"):
-    if None not in (sepal_length, sepal_width, petal_length, petal_width):
-        user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
-        user_prediction = model.predict(user_features)
-        predicted_species = iris.target_names[user_prediction][0]
-        st.write(f"### The predicted Iris flower species is: **{predicted_species.capitalize()}**")
-    else:
-        st.write("Please enter valid values in all fields.")
+sepal_length = get_valid_input('Sepal length', df['sepal length (cm)'].min(), df['sepal length (cm)'].max())
+sepal_width = get_valid_input('Sepal width', df['sepal width (cm)'].min(), df['sepal width (cm)'].max())
+petal_length = get_valid_input('Petal length', df['petal length (cm)'].min(), df['petal length (cm)'].max())
+petal_width = get_valid_input('Petal width', df['petal width (cm)'].min(), df['petal width (cm)'].max())
+
+user_features = [[sepal_length, sepal_width, petal_length, petal_width]]
+user_prediction = model.predict(user_features)
+predicted_species = iris.target_names[user_prediction][0]
+
+print(f"\n🌸 The predicted Iris flower species is: **{predicted_species.capitalize()}**")
